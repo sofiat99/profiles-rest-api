@@ -5,7 +5,9 @@ from rest_framework import status
 from rest_framework import viewsets
 # no deja put patch delete
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import filters
+from rest_framework import filters  # filtros search url
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from profiles_api import serializers
 from profiles_api import models
@@ -115,4 +117,11 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('name', 'email',) #puedo filtrar por name or email en url es ?search=Nombre
+    # puedo filtrar por name or email en url es ?search=Nombre
+    search_fields = ('name', 'email',)
+
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication tokens"""
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+    
